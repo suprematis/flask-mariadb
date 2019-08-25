@@ -3,8 +3,10 @@ services:
   python:
     build: 
       context: './python/'
+    depends_on:
+      - mariadb
     ports:
-    - "5000:5000"
+      - "5000:5000"
     volumes:
       - python:/app
     container_name: python

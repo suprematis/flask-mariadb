@@ -1,14 +1,15 @@
+import MySQLdb as mdb
 from flask import Flask
 from flask import request
 import subprocess
 
-
+db=mdb.connect('mariadb','flaskuser','flask123','flasktest')
 app = Flask('flask-mysql')
 #ip_whitelist = ['127.0.0.1']
 query_success = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Success'"
-query_pending = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Pending'"
-query_failed = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Failed'"
-
+#query_pending = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Pending'"
+#query_failed = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Failed'"
+cur = con.cursor()
 
 def valid_ip():
 #    client = request.remote_addr
@@ -21,24 +22,28 @@ def valid_ip():
 @app.route('/status/')
 def get_status():
     if valid_ip():
-        command_success = "mysql -hmariadb -uflaskuser -pflask123 -e '{0}'".format(
-            query_success)
-        command_pending = "mysql -hmariadb -uflaskuser -pflask123 -e '{0}'".format(
-            query_pending)
-        command_failed = "mysql -hmariadb -uflaskuser -pflask123 -e '{0}'".format(
-            query_failed)
+        command_success = cur.execute("SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Success'") 
+#        command_success = "docker exec mariadb mysql -uflaskuser -pflask123 -e '{0}'".format(
+#            query_success)
+#        command_pending = "docker exec mariadb mysql -uflaskuser -pflask123 -e '{0}'".format(
+#            query_pending)
+#        command_failed = "docker exec mariadb mysql -uflaskuser -pflask123 -e '{0}'".format(
+#            query_failed)
 
         try:
-            result_success = subprocess.check_output(
-                [command_success], shell=True)
-            result_pending = subprocess.check_output(
-                [command_pending], shell=True)
-            result_failed = subprocess.check_output(
-                [command_failed], shell=True)
+            command_success
+#            result_success = subprocess.check_output(
+#                [command_success], shell=True)
+#            result_pending = subprocess.check_output(
+#                [command_pending], shell=True)
+#            result_failed = subprocess.check_output(
+#                [command_failed], shell=True)
         except subprocess.CalledProcessError as e:
             return "An error occurred while trying to fetch task status updates."
 
-        return 'Success %s, Pending %s, Failed %s' % (result_success, result_pending, result_failed)
+
+        return 'Success %s, Pending %s, Failed %s' % (result_success)
+#        return 'Success %s, Pending %s, Failed %s' % (result_success, result_pending, result_failed)
     else:
         return """<title>404 Not Found</title>
                <h1>Not Found</h1>
