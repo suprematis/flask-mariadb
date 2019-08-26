@@ -42,7 +42,7 @@ def get_status():
             return "An error occurred while trying to fetch task status updates."
 
 
-        return 'Success %s, Pending %s, Failed %s' % (result_success)
+        return 'Success %s' % (command_success)
 #        return 'Success %s, Pending %s, Failed %s' % (result_success, result_pending, result_failed)
     else:
         return """<title>404 Not Found</title>
