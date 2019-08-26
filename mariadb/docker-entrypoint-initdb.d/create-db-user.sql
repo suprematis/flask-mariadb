@@ -1,1 +1,1 @@
-mysql -uroot -e "CREATE DATABASE flasktest; GRANT ALL ON flasktest.* TO flaskuser@localhost IDENTIFIED BY 'flask123'; FLUSH PRIVILEGES;"
+CREATE DATABASE flasktest; GRANT ALL ON flasktest.* TO 'flaskuser'@'172.28.0.3' IDENTIFIED BY 'flask123'; FLUSH PRIVILEGES;

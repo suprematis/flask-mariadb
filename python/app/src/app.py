@@ -9,7 +9,7 @@ app = Flask('flask-mysql')
 query_success = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Success'"
 #query_pending = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Pending'"
 #query_failed = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Failed'"
-cur = con.cursor()
+cur = db.cursor()
 
 def valid_ip():
 #    client = request.remote_addr
