@@ -26,7 +26,7 @@ def sql_queries(ref):
 
 @app.route('/status/')
 def get_status( success, pending ):
-        return ( success, pending );
+        return '%s , %s' % ( success, pending );
 
 
  
