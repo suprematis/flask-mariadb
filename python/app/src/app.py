@@ -12,6 +12,7 @@ query_failed = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Failed'"
 cur = db.cursor()
 def sql_queries(ref):
      def success():
+         cur.execute(query_success)
          return query_success
      def pending():
          return query_pending
@@ -19,16 +20,9 @@ def sql_queries(ref):
          return query_failed
      if ref == 1:
          return success
-
+     else:
+         return pending
     	
-     success = cur.execute(query_success)
-def valid_ip():
-#    client = request.remote_addr
-#    if client in ip_whitelist:
-     return True;
-#    else:
-#        return False
-
 
 @app.route('/status/')
 def get_status( success, pending ):
