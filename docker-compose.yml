@@ -4,22 +4,23 @@ services:
     build: 
       context: './python/'
     links:
-      - "mariadb:db"
+      - "mysql:db"
     ports:
       - "5000:5000"
     volumes:
       - python:/app
     container_name: python
-  mariadb:
+  mysql:
     build:
-      context: './mariadb/'
+      context: './mysql/'
     ports:
       - "3306:3306"
     volumes:
-      - mariadb:/var/lib/mysql
+      - mysql:/var/lib/mysql
+#      - mysql/custom:/etc/mysql/conf.d
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
-    container_name: mariadb
+    container_name: mysql
 volumes:
   python:
-  mariadb:
+  mysql:

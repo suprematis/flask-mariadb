@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 class Database:
     def __init__(self):
-        host = "db"
+        host = "172.29.0.2"
         user = "flaskuser"
         password = "flask123"
         db = "flasktest"
@@ -18,14 +18,10 @@ class Database:
     
 
     def list_tasks(self):
-        try:
-            self.cur.execute("SELECT task_id, task_title, task_status FROM tasks LIMIT 50")
-            result = self.cur.fetchall()
-
-            return result
-        finally:
-            self.con.close()
-
+        self.cur.execute("SELECT task_id, task_title, task_status FROM tasks")
+        result = self.cur.fetchall()
+	
+        return result
 
 @app.route('/status')
 def tasks():
