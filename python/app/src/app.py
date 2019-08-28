@@ -1,55 +1,42 @@
 import MySQLdb as mdb
 from flask import Flask
 from flask import request
+from flask import Flask, render_template
 import subprocess
 
-db=mdb.connect('mariadb','flaskuser','flask123','flasktest')
-app = Flask('flask-mysql')
+
+app = Flask(__name__)
 #ip_whitelist = ['127.0.0.1']
-query_success = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Success'"
+#query_success = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Success'"
 #query_pending = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Pending'"
 #query_failed = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Failed'"
-cur = db.cursor()
 
-def valid_ip():
-#    client = request.remote_addr
-#    if client in ip_whitelist:
-     return True
-#    else:
-#        return False
+class Database:
+    def __init__(self):
+        host = "mariadb"
+        user = "flaskuser"
+        password = "flask123"
+        db = "flasktest"
+        self.con = mdb.connect(host=host, user=user, password=password, db=db)
+        self.cur = self.con.cursor()
+    def list_tasks(self):
+        self.cur.execute("SELECT task_id, task_title, task_status FROM tasks LIMIT 50")
+        result = self.cur.fetchall()
+        return result
 
 
 @app.route('/status/')
-def get_status():
-    if valid_ip():
-        command_success = cur.execute("SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Success'") 
-#        command_success = "docker exec mariadb mysql -uflaskuser -pflask123 -e '{0}'".format(
-#            query_success)
-#        command_pending = "docker exec mariadb mysql -uflaskuser -pflask123 -e '{0}'".format(
-#            query_pending)
-#        command_failed = "docker exec mariadb mysql -uflaskuser -pflask123 -e '{0}'".format(
-#            query_failed)
+def tasks():
 
-        try:
-            command_success
-#            result_success = subprocess.check_output(
-#                [command_success], shell=True)
-#            result_pending = subprocess.check_output(
-#                [command_pending], shell=True)
-#            result_failed = subprocess.check_output(
-#                [command_failed], shell=True)
-        except subprocess.CalledProcessError as e:
-            return "An error occurred while trying to fetch task status updates."
+    def db_query():
+        db = Database()
+        tasks = db.list_tasks()
 
+        return tasks
 
-        return 'Success %s' % (command_success)
-#        return 'Success %s, Pending %s, Failed %s' % (result_success, result_pending, result_failed)
-    else:
-        return """<title>404 Not Found</title>
-               <h1>Not Found</h1>
-               <p>The requested URL was not found on the server.
-               If you entered the URL manually please check your
-               spelling and try again.</p>""", 404
+    res = db_query() 
+
+    return render_template('tasks.html', result=res, content_type='application/json')
 
 
 if __name__ == '__main__':
