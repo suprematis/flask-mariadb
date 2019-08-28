@@ -1,38 +1,40 @@
-import MySQLdb as mdb
-from flask import Flask
-from flask import request
-from flask import Flask, render_template
-import subprocess
-
+import pymysql.cursors
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
-#ip_whitelist = ['127.0.0.1']
-#query_success = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Success'"
-#query_pending = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Pending'"
-#query_failed = "SELECT COUNT(*) FROM flasktest.tasks WHERE task_status='Failed'"
+
 
 class Database:
     def __init__(self):
-        host = "mariadb"
+        host = "db"
         user = "flaskuser"
         password = "flask123"
         db = "flasktest"
-        self.con = mdb.connect(host=host, user=user, password=password, db=db)
+        charset="utf8mb4"
+
+        self.con = pymysql.connect(host=host, user=user, password=password, db=db, charset=charset)
+
         self.cur = self.con.cursor()
+    
+
     def list_tasks(self):
-        self.cur.execute("SELECT task_id, task_title, task_status FROM tasks LIMIT 50")
-        result = self.cur.fetchall()
-        return result
+        try:
+            self.cur.execute("SELECT task_id, task_title, task_status FROM tasks LIMIT 50")
+            result = self.cur.fetchall()
+
+            return result
+        finally:
+            self.con.close()
 
 
-@app.route('/status/')
+@app.route('/status')
 def tasks():
 
     def db_query():
         db = Database()
-        tasks = db.list_tasks()
+        tsk = db.list_tasks()
 
-        return tasks
+        return tsk
 
     res = db_query() 
 
