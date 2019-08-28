@@ -1,0 +1,45 @@
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+
+
+
+    {% if result %}
+    
+    {% for row in result %}
+    
+    {% endfor %}
+    {% endif %}
+<table id="tasks" style="width:100%"><tbody><tr>
+        <th>Task ID</th>
+        <th>Task Title</th>
+        <th>Task Status</th>
+    </tr><tr>
+        <td> {{ row.task_id }}</td>
+        <td> {{ row.task_title }}</td>
+        <td> {{ row.task_status }}</td>
+    </tr></tbody></table>
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+version: "3.2"
+services:
+  python:
+    build: 
+      context: './python/'
+    links:
+      - "mariadb:db"
+    ports:
+      - "5000:5000"
+    volumes:
+      - python:/app
+    container_name: python
+  mariadb:
+    build:
+      context: './mariadb/'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    container_name: mariadb
+volumes:
+  python:
+  mariadb:
